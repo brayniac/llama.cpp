@@ -116,7 +116,7 @@ static ggml_cuda_device_info ggml_cuda_init() {
         CUdevice device;
         CU_CHECK(cuDeviceGet(&device, id));
         CU_CHECK(cuDeviceGetAttribute(&device_vmm, CU_DEVICE_ATTRIBUTE_VIRTUAL_MEMORY_MANAGEMENT_SUPPORTED, device));
-        CU_CHECK(cuDevicePrimaryCtxSetFlags(&device, CU_CTX_SCHED_SPIN));
+        CU_CHECK(cuDevicePrimaryCtxSetFlags(device, CU_CTX_SCHED_SPIN));
 
         if (device_vmm) {
             CUmemAllocationProp alloc_prop = {};
