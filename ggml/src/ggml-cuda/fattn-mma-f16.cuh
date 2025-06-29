@@ -1363,16 +1363,7 @@ void ggml_cuda_flash_attn_ext_mma_f16_case(ggml_backend_cuda_context & ctx, ggml
     const int id = ggml_cuda_get_device();
     const int cc = ggml_cuda_info().devices[id].cc;
 
-    // Use Ada Lovelace config for RTX 4090 to test performance improvements
-    #if 1 // Set to 1 to enable Ada optimizations, 0 to disable
-    typedef typename std::conditional<
-        (cc >= GGML_CUDA_CC_ADA_LOVELACE && (DKQ == 128 || DKQ == 64)),
-        ggml_cuda_ada::fattn_ada_config<DKQ, DV>,
-        fattn_mma_f16_config<DKQ, DV>
-    >::type c;
-    #else
     typedef fattn_mma_f16_config<DKQ, DV> c;
-    #endif
 
     const int nstages = cp_async_available(cc) ? c::nstages_target : 0;
 
