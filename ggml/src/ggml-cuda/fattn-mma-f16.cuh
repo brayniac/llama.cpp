@@ -157,33 +157,34 @@ struct fattn_mma_f16_config<112, 112> {
 
 template <>
 struct fattn_mma_f16_config<128, 128> {
-    static constexpr int  nbatch_fa      = 64;
-    static constexpr int  nwarps_max     = 4;
+    // Ada Lovelace enhanced parameters for RTX 4090 (was: 64, 4, 2)
+    static constexpr int  nbatch_fa      = 128;  // 2x increase for Ada Lovelace  
+    static constexpr int  nwarps_max     = 8;    // 2x increase for 128 threads/SM
     static constexpr bool Q_in_reg       = true;
-    static constexpr int  nstages_target = 2;
+    static constexpr int  nstages_target = 4;    // 2x increase for enhanced pipelining
 
     static int get_nbatch_K2_host(const int /*cc*/, const int /*ncols*/) {
-        return 64;
+        return 128;  // 2x increase for Ada Lovelace
     }
 
     static constexpr __device__ int get_nbatch_K2_device(int /*ncols*/) {
-        return 64;
+        return 128;  // 2x increase for Ada Lovelace
     }
 
     static int get_nbatch_V2_host(const int /*cc*/, const int /*ncols*/) {
-        return 64;
+        return 128;  // 2x increase for Ada Lovelace
     }
 
     static constexpr __device__ int get_nbatch_V2_device(int /*ncols*/) {
-        return 64;
+        return 128;  // 2x increase for Ada Lovelace
     }
 
     static int get_nbatch_combine_host(const int /*cc*/, const int /*ncols*/) {
-        return 64;
+        return 128;  // 2x increase for Ada Lovelace
     }
 
     static constexpr __device__ int get_nbatch_combine_device(int /*ncols*/) {
-        return 64;
+        return 128;  // 2x increase for Ada Lovelace
     }
 };
 
@@ -1363,7 +1364,16 @@ void ggml_cuda_flash_attn_ext_mma_f16_case(ggml_backend_cuda_context & ctx, ggml
     const int id = ggml_cuda_get_device();
     const int cc = ggml_cuda_info().devices[id].cc;
 
+    // Use Ada Lovelace config for RTX 4090 to test performance improvements
+    #if 1 // Set to 1 to enable Ada optimizations, 0 to disable
+    typedef typename std::conditional<
+        (cc >= GGML_CUDA_CC_ADA_LOVELACE && (DKQ == 128 || DKQ == 64)),
+        ggml_cuda_ada::fattn_ada_config<DKQ, DV>,
+        fattn_mma_f16_config<DKQ, DV>
+    >::type c;
+    #else
     typedef fattn_mma_f16_config<DKQ, DV> c;
+    #endif
 
     const int nstages = cp_async_available(cc) ? c::nstages_target : 0;
 
