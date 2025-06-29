@@ -2,4 +2,4 @@
 
 #include "../fattn-mma-f16.cuh"
 
-DECL_FATTN_MMA_F16_CASE(576, 512, 1, 16);
+// Removed DeepSeek 576x512 for Ada Lovelace minimal build
