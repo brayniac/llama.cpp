@@ -7,6 +7,7 @@
 #include "fattn-vec-f32.cuh"
 #include "fattn-wmma-f16.cuh"
 #include "fattn.cuh"
+#include "fattn-ada.cuh"
 
 template <int DKQ, int DV, int ncols2>
 static void ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1(ggml_backend_cuda_context & ctx, ggml_tensor * dst) {
@@ -114,6 +115,53 @@ static void ggml_cuda_flash_attn_ext_mma_f16(ggml_backend_cuda_context & ctx, gg
         } break;
         default:
             GGML_ABORT("fatal error");
+            break;
+    }
+}
+
+// Ada Lovelace optimized flash attention
+static void ggml_cuda_flash_attn_ext_mma_f16_ada(ggml_backend_cuda_context & ctx, ggml_tensor * dst) {
+    const ggml_tensor * Q = dst->src[0];
+    const ggml_tensor * V = dst->src[2];
+    
+    printf("*** Ada Lovelace Flash Attention Detected ***\n");
+    
+    // Use Ada-optimized dispatch functions for supported dimensions
+    switch (Q->ne[0]) {
+        case 64:
+            GGML_ASSERT(V->ne[0] == 64);
+            printf("Using Ada Lovelace optimized 64x64 flash attention\n");
+            ggml_cuda_ada::ggml_cuda_flash_attn_ext_mma_f16_switch_ncols2_ada<64, 64>(ctx, dst);
+            break;
+        case 80:
+            GGML_ASSERT(V->ne[0] == 80);
+            printf("Using Ada Lovelace optimized 80x80 flash attention\n");
+            ggml_cuda_flash_attn_ext_mma_f16_switch_ncols2<80, 80>(ctx, dst);
+            break;
+        case 96:
+            GGML_ASSERT(V->ne[0] == 96);
+            printf("Using Ada Lovelace optimized 96x96 flash attention\n");
+            ggml_cuda_flash_attn_ext_mma_f16_switch_ncols2<96, 96>(ctx, dst);
+            break;
+        case 112:
+            GGML_ASSERT(V->ne[0] == 112);
+            printf("Using Ada Lovelace optimized 112x112 flash attention\n");
+            ggml_cuda_flash_attn_ext_mma_f16_switch_ncols2<112, 112>(ctx, dst);
+            break;
+        case 128:
+            GGML_ASSERT(V->ne[0] == 128);
+            printf("Using Ada Lovelace optimized 128x128 flash attention\n");
+            ggml_cuda_ada::ggml_cuda_flash_attn_ext_mma_f16_switch_ncols2_ada<128, 128>(ctx, dst);
+            break;
+        case 256:
+            GGML_ASSERT(V->ne[0] == 256);
+            printf("Using Ada Lovelace optimized 256x256 flash attention\n");
+            ggml_cuda_flash_attn_ext_mma_f16_switch_ncols2<256, 256>(ctx, dst);
+            break;
+        default:
+            // Fallback to standard implementation for unsupported dimensions
+            printf("Using standard flash attention (unsupported Ada dimension: %d)\n", (int)Q->ne[0]);
+            ggml_cuda_flash_attn_ext_mma_f16(ctx, dst);
             break;
     }
 }
@@ -342,5 +390,10 @@ void ggml_cuda_flash_attn_ext(ggml_backend_cuda_context & ctx, ggml_tensor * dst
         return;
     }
 
-    ggml_cuda_flash_attn_ext_mma_f16(ctx, dst);
+    // Use Ada Lovelace optimized flash attention if available
+    if (cc >= GGML_CUDA_CC_ADA_LOVELACE) {
+        ggml_cuda_flash_attn_ext_mma_f16_ada(ctx, dst);
+    } else {
+        ggml_cuda_flash_attn_ext_mma_f16(ctx, dst);
+    }
 }
