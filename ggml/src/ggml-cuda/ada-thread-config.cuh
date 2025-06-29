@@ -21,7 +21,7 @@ struct ada_sm_config {
     static constexpr int REGISTERS_PER_SM = 65536;
     static constexpr int SHARED_MEM_PER_SM = 164 * 1024; // 164KB
     static constexpr int MAX_WARPS_PER_SM = 64;
-    static constexpr int WARP_SIZE = 32;
+    // WARP_SIZE is already defined in common.cuh as 32
 };
 
 // Optimal thread block configurations for different kernel types
