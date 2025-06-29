@@ -5,6 +5,9 @@
 #include "ada-thread-config.cuh"
 #include "ada-memory.cuh"
 
+#include <curand.h>
+#include <cstdio>
+
 namespace ggml_cuda_ada_benchmark {
 
 // Simple matrix multiplication benchmark using Ada optimizations

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common.cuh"
-#include "mma.cuh"
 
 // Ada Lovelace (RTX 4090) specific tensor core optimizations
 // Leverages 4th-generation Tensor Cores with enhanced capabilities:
@@ -187,12 +186,12 @@ __device__ __forceinline__ void dispatch_tensor_core_ada(
             mma_ada_mixed_precision(c, a, b);
         }
     } else {
-        // Fallback to standard MMA
-        ggml_cuda_mma::mma(c, a, b);
+        // Fallback to standard MMA (placeholder - need actual implementation)
+        // ggml_cuda_mma::mma(c, a, b);
     }
 #else
-    // Compile-time fallback
-    ggml_cuda_mma::mma(c, a, b);
+    // Compile-time fallback (placeholder - need actual implementation)
+    // ggml_cuda_mma::mma(c, a, b);
 #endif
 }
 

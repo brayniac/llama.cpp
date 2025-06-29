@@ -1,6 +1,8 @@
 #pragma once
 
 #include "common.cuh"
+#include <algorithm>
+#include <type_traits>
 
 // Ada Lovelace (RTX 4090) optimized thread block configurations
 // Leverages RTX 4090's specific SM architecture:
@@ -172,10 +174,10 @@ public:
             shared_mem_per_block;
         
         // Find limiting factor
-        result.achieved_occupancy = min({max_blocks_by_threads, 
-                                        max_blocks_by_registers,
-                                        max_blocks_by_shared_mem,
-                                        ada_sm_config::MAX_BLOCKS_PER_SM});
+        result.achieved_occupancy = min(min(min(max_blocks_by_threads, 
+                                                    max_blocks_by_registers),
+                                                max_blocks_by_shared_mem),
+                                            ada_sm_config::MAX_BLOCKS_PER_SM);
         
         result.theoretical_occupancy = ada_sm_config::MAX_THREADS_PER_SM / threads_per_block;
         

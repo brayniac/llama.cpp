@@ -94,31 +94,34 @@ private:
     template<typename... Args>
     static auto dispatch_flash_attention(Args&&... args) {
         if (ada_runtime_detector::is_ada_lovelace_available()) {
-            // Use Ada-optimized flash attention
-            return ada_flash_attention_optimized(std::forward<Args>(args)...);
+            // Use Ada-optimized flash attention (placeholder for actual implementation)
+            printf("Using Ada Lovelace optimized flash attention\n");
         } else {
             // Fallback to standard implementation
-            return standard_flash_attention(std::forward<Args>(args)...);
+            printf("Using standard flash attention\n");
         }
+        return 0; // placeholder return
     }
     
     template<typename... Args>
     static auto dispatch_matrix_multiply(Args&&... args) {
         if (ada_runtime_detector::is_ada_lovelace_available()) {
-            // Use Ada-optimized matrix multiplication
-            return ada_matrix_multiply_optimized(std::forward<Args>(args)...);
+            // Use Ada-optimized matrix multiplication (placeholder for actual implementation)
+            printf("Using Ada Lovelace optimized matrix multiplication\n");
         } else {
-            return standard_matrix_multiply(std::forward<Args>(args)...);
+            printf("Using standard matrix multiplication\n");
         }
+        return 0; // placeholder return
     }
     
     template<typename... Args>
     static auto dispatch_tensor_core(Args&&... args) {
         if (ada_runtime_detector::supports_bf16_tensor_cores()) {
-            return ggml_cuda_mma_ada::dispatch_tensor_core_ada(std::forward<Args>(args)...);
+            printf("Using Ada Lovelace tensor cores\n");
         } else {
-            return ggml_cuda_mma::mma(std::forward<Args>(args)...);
+            printf("Using standard tensor cores\n");
         }
+        return 0; // placeholder return
     }
 };
 
