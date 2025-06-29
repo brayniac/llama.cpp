@@ -157,34 +157,34 @@ struct fattn_mma_f16_config<112, 112> {
 
 template <>
 struct fattn_mma_f16_config<128, 128> {
-    // Ada Lovelace enhanced parameters for RTX 4090 (was: 64, 4, 2)
+    // Ada Lovelace enhanced parameters for RTX 4090 (conservative approach)
     static constexpr int  nbatch_fa      = 128;  // 2x increase for Ada Lovelace  
-    static constexpr int  nwarps_max     = 8;    // 2x increase for 128 threads/SM
+    static constexpr int  nwarps_max     = 4;    // Keep at 4 to maintain template compatibility
     static constexpr bool Q_in_reg       = true;
     static constexpr int  nstages_target = 4;    // 2x increase for enhanced pipelining
 
     static int get_nbatch_K2_host(const int /*cc*/, const int /*ncols*/) {
-        return 128;  // 2x increase for Ada Lovelace
+        return 96;  // 1.5x increase for Ada Lovelace (conservative)
     }
 
     static constexpr __device__ int get_nbatch_K2_device(int /*ncols*/) {
-        return 128;  // 2x increase for Ada Lovelace
+        return 96;  // 1.5x increase for Ada Lovelace (conservative)
     }
 
     static int get_nbatch_V2_host(const int /*cc*/, const int /*ncols*/) {
-        return 128;  // 2x increase for Ada Lovelace
+        return 96;  // 1.5x increase for Ada Lovelace (conservative)
     }
 
     static constexpr __device__ int get_nbatch_V2_device(int /*ncols*/) {
-        return 128;  // 2x increase for Ada Lovelace
+        return 96;  // 1.5x increase for Ada Lovelace (conservative)
     }
 
     static int get_nbatch_combine_host(const int /*cc*/, const int /*ncols*/) {
-        return 128;  // 2x increase for Ada Lovelace
+        return 96;  // 1.5x increase for Ada Lovelace (conservative)
     }
 
     static constexpr __device__ int get_nbatch_combine_device(int /*ncols*/) {
-        return 128;  // 2x increase for Ada Lovelace
+        return 96;  // 1.5x increase for Ada Lovelace (conservative)
     }
 };
 
