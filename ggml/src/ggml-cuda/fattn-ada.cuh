@@ -1,7 +1,13 @@
 #pragma once
 
 #include "common.cuh"
-#include "fattn-mma-f16.cuh"
+
+// Forward declarations instead of including fattn-mma-f16.cuh to avoid duplicate definitions
+struct ggml_backend_cuda_context;
+struct ggml_tensor;
+
+template <int DKQ, int DV, int ncols1, int ncols2>
+void ggml_cuda_flash_attn_ext_mma_f16_case(ggml_backend_cuda_context & ctx, ggml_tensor * dst);
 
 // Ada Lovelace (RTX 4090) optimized Flash Attention configurations
 // These configurations leverage RTX 4090's specific capabilities:
