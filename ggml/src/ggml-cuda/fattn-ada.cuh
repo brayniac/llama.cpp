@@ -214,12 +214,14 @@ void ggml_cuda_flash_attn_ext_mma_f16_case_ada(ggml_backend_cuda_context & ctx, 
     printf("Ada Lovelace Flash Attention: DKQ=%d, DV=%d, batch_fa=%d, nwarps=%d, nstages=%d\n", 
            DKQ, DV, c::nbatch_fa, c::nwarps_max, c::nstages_target);
 
-    // For now, delegate to the standard implementation with a message
-    // In a full integration, we would implement Ada-specific kernel here
-    printf("Delegating to standard MMA implementation (Ada optimizations framework active)\n");
+    // IMPORTANT: The standard implementation uses fattn_mma_f16_config, not our Ada config
+    // So our optimized parameters aren't actually being used in the kernel
+    // This is why you're not seeing performance improvements
     
-    // Call the standard implementation but with our Ada configuration active
-    // This requires the standard function to pick up our template specialization
+    printf("WARNING: Ada config defined but not used by kernel - no performance gain expected\n");
+    printf("TODO: Modify kernel to actually use Ada parameters for real speedup\n");
+    
+    // Call the standard implementation (which ignores our Ada config)
     ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, ncols1, ncols2>(ctx, dst);
 }
 
