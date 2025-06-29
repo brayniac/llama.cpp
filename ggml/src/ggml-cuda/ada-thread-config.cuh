@@ -72,6 +72,7 @@ public:
     // Calculate optimal configuration for matrix multiplication
     static __host__ config_result get_matmul_config(
         const int M, const int N, const int K, const int cc) {
+        GGML_UNUSED(K);
         
         config_result result;
         
@@ -113,6 +114,7 @@ public:
     // Calculate optimal configuration for attention
     static __host__ config_result get_attention_config(
         const int batch_size, const int seq_len, const int head_dim, const int cc) {
+        GGML_UNUSED(head_dim);
         
         config_result result;
         

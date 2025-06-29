@@ -28,6 +28,7 @@ struct fattn_ada_config<64, 64> {
     static constexpr bool use_enhanced_coalescing = true;
 
     static int get_nbatch_K2_host(const int cc, const int ncols) {
+        GGML_UNUSED(ncols);
         if (cc >= GGML_CUDA_CC_ADA_LOVELACE) {
             return 64; // 2x increase for Ada Lovelace
         }
@@ -35,6 +36,7 @@ struct fattn_ada_config<64, 64> {
     }
 
     static constexpr __device__ int get_nbatch_K2_device(int ncols) {
+        GGML_UNUSED(ncols);
 #if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
         return 64;
 #else
@@ -43,6 +45,7 @@ struct fattn_ada_config<64, 64> {
     }
 
     static int get_nbatch_V2_host(const int cc, const int ncols) {
+        GGML_UNUSED(ncols);
         if (cc >= GGML_CUDA_CC_ADA_LOVELACE) {
             return 64;
         }
@@ -50,6 +53,7 @@ struct fattn_ada_config<64, 64> {
     }
 
     static constexpr __device__ int get_nbatch_V2_device(int ncols) {
+        GGML_UNUSED(ncols);
 #if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
         return 64;
 #else
@@ -58,6 +62,7 @@ struct fattn_ada_config<64, 64> {
     }
 
     static int get_nbatch_combine_host(const int cc, const int ncols) {
+        GGML_UNUSED(ncols);
         if (cc >= GGML_CUDA_CC_ADA_LOVELACE) {
             return 64;
         }
@@ -65,6 +70,7 @@ struct fattn_ada_config<64, 64> {
     }
 
     static constexpr __device__ int get_nbatch_combine_device(int ncols) {
+        GGML_UNUSED(ncols);
 #if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
         return 64;
 #else
@@ -85,6 +91,7 @@ struct fattn_ada_config<128, 128> {
     static constexpr bool use_tensor_core_bf16 = true; // Leverage BF16 tensor cores
 
     static int get_nbatch_K2_host(const int cc, const int ncols) {
+        GGML_UNUSED(ncols);
         if (cc >= GGML_CUDA_CC_ADA_LOVELACE) {
             return 128; // Maximum batch size for Ada
         }
@@ -92,6 +99,7 @@ struct fattn_ada_config<128, 128> {
     }
 
     static constexpr __device__ int get_nbatch_K2_device(int ncols) {
+        GGML_UNUSED(ncols);
 #if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
         return 128;
 #else
@@ -100,6 +108,7 @@ struct fattn_ada_config<128, 128> {
     }
 
     static int get_nbatch_V2_host(const int cc, const int ncols) {
+        GGML_UNUSED(ncols);
         if (cc >= GGML_CUDA_CC_ADA_LOVELACE) {
             return 128;
         }
@@ -107,6 +116,7 @@ struct fattn_ada_config<128, 128> {
     }
 
     static constexpr __device__ int get_nbatch_V2_device(int ncols) {
+        GGML_UNUSED(ncols);
 #if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
         return 128;
 #else
@@ -115,6 +125,7 @@ struct fattn_ada_config<128, 128> {
     }
 
     static int get_nbatch_combine_host(const int cc, const int ncols) {
+        GGML_UNUSED(ncols);
         if (cc >= GGML_CUDA_CC_ADA_LOVELACE) {
             return 128;
         }
@@ -122,6 +133,7 @@ struct fattn_ada_config<128, 128> {
     }
 
     static constexpr __device__ int get_nbatch_combine_device(int ncols) {
+        GGML_UNUSED(ncols);
 #if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
         return 128;
 #else

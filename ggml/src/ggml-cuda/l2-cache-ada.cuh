@@ -74,6 +74,7 @@ struct ada_cache_blocking_strategy {
     static __host__ __device__ void get_optimal_block_sizes(
         const int M, const int N, const int K,
         int& block_m, int& block_n, int& block_k) {
+        GGML_UNUSED(K);
         
         // Conservative approach: keep 2/3 of working set in L2 cache
         constexpr size_t target_working_set = ada_l2_cache_config::L2_CACHE_SIZE * 2 / 3;

@@ -82,8 +82,8 @@ __global__ void benchmark_ada_attention(
     
     if (batch_idx >= batch_size || seq_idx >= seq_len) return;
     
-    // Use Ada-optimized configuration
-    constexpr auto config = fattn_ada_config<128, 128>{};
+    // Use Ada-optimized configuration (for reference)
+    // constexpr auto config = fattn_ada_config<128, 128>{};
     
     // Enhanced attention computation with Ada optimizations
     // This is a simplified version for benchmarking
