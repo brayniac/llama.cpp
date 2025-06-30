@@ -29,33 +29,52 @@ struct fattn_mma_f16_config;
 
 template <>
 struct fattn_mma_f16_config< 64,  64> {
-    static constexpr int  nbatch_fa      = 64;
+    // Ada Lovelace: Increased from 64 to 80 for better utilization of enhanced SM
+    static constexpr int  nbatch_fa      = 80;
     static constexpr int  nwarps_max     = 4;
     static constexpr bool Q_in_reg       = true;
     static constexpr int  nstages_target = 2;
 
-    static int get_nbatch_K2_host(const int /*cc*/, const int /*ncols*/) {
-        return 32;
+    static int get_nbatch_K2_host(const int cc, const int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+        return (cc >= GGML_CUDA_CC_ADA_LOVELACE) ? 48 : 32;
     }
 
     static constexpr __device__ int get_nbatch_K2_device(int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+#if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
+        return 48;
+#else
         return 32;
+#endif
     }
 
-    static int get_nbatch_V2_host(const int /*cc*/, const int /*ncols*/) {
-        return 32;
+    static int get_nbatch_V2_host(const int cc, const int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+        return (cc >= GGML_CUDA_CC_ADA_LOVELACE) ? 48 : 32;
     }
 
     static constexpr __device__ int get_nbatch_V2_device(int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+#if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
+        return 48;
+#else
         return 32;
+#endif
     }
 
-    static int get_nbatch_combine_host(const int /*cc*/, const int /*ncols*/) {
-        return 32;
+    static int get_nbatch_combine_host(const int cc, const int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+        return (cc >= GGML_CUDA_CC_ADA_LOVELACE) ? 48 : 32;
     }
 
     static constexpr __device__ int get_nbatch_combine_device(int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+#if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
+        return 48;
+#else
         return 32;
+#endif
     }
 };
 
@@ -67,60 +86,96 @@ struct fattn_mma_f16_config< 64,  64> {
 
 template <>
 struct fattn_mma_f16_config<128, 128> {
-    static constexpr int  nbatch_fa      = 64;
+    // Ada Lovelace: Increased from 64 to 80 for better utilization of enhanced SM
+    static constexpr int  nbatch_fa      = 80;
     static constexpr int  nwarps_max     = 4;
     static constexpr bool Q_in_reg       = true;
     static constexpr int  nstages_target = 2;
 
-    static int get_nbatch_K2_host(const int /*cc*/, const int /*ncols*/) {
-        return 64;
+    static int get_nbatch_K2_host(const int cc, const int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+        return (cc >= GGML_CUDA_CC_ADA_LOVELACE) ? 96 : 64;
     }
 
     static constexpr __device__ int get_nbatch_K2_device(int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+#if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
+        return 96;
+#else
         return 64;
+#endif
     }
 
-    static int get_nbatch_V2_host(const int /*cc*/, const int /*ncols*/) {
-        return 64;
+    static int get_nbatch_V2_host(const int cc, const int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+        return (cc >= GGML_CUDA_CC_ADA_LOVELACE) ? 96 : 64;
     }
 
     static constexpr __device__ int get_nbatch_V2_device(int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+#if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
+        return 96;
+#else
         return 64;
+#endif
     }
 
-    static int get_nbatch_combine_host(const int /*cc*/, const int /*ncols*/) {
-        return 64;
+    static int get_nbatch_combine_host(const int cc, const int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+        return (cc >= GGML_CUDA_CC_ADA_LOVELACE) ? 96 : 64;
     }
 
     static constexpr __device__ int get_nbatch_combine_device(int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+#if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
+        return 96;
+#else
         return 64;
+#endif
     }
 };
 
 template <>
 struct fattn_mma_f16_config<256, 256> {
-    static constexpr int  nbatch_fa      = 32;
+    // Ada Lovelace: Increased from 32 to 48 for better utilization of enhanced SM
+    static constexpr int  nbatch_fa      = 48;
     static constexpr int  nwarps_max     = 4;
     static constexpr bool Q_in_reg       = true;
     static constexpr int  nstages_target = 2;
 
-    static int get_nbatch_K2_host(const int /*cc*/, const int /*ncols*/) {
-        return 128;
+    static int get_nbatch_K2_host(const int cc, const int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+        return (cc >= GGML_CUDA_CC_ADA_LOVELACE) ? 160 : 128;
     }
 
     static constexpr __device__ int get_nbatch_K2_device(int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+#if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
+        return 160;
+#else
         return 128;
+#endif
     }
 
-    static int get_nbatch_V2_host(const int /*cc*/, const int /*ncols*/) {
-        return 128;
+    static int get_nbatch_V2_host(const int cc, const int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+        return (cc >= GGML_CUDA_CC_ADA_LOVELACE) ? 160 : 128;
     }
 
     static constexpr __device__ int get_nbatch_V2_device(int /*ncols*/) {
+        // Ada Lovelace optimization: larger batch size for enhanced SM architecture
+#if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
+        return 160;
+#else
         return 128;
+#endif
     }
 
     static int get_nbatch_combine_host(const int cc, const int ncols) {
+        // Ada Lovelace optimization: enhanced batch processing
+        if (cc >= GGML_CUDA_CC_ADA_LOVELACE) {
+            return 96;
+        }
         if (ggml_cuda_highest_compiled_arch(cc) == GGML_CUDA_CC_TURING) {
             return ncols <= 16 ? 128 : 64;
         }
@@ -128,12 +183,16 @@ struct fattn_mma_f16_config<256, 256> {
     }
 
     static constexpr __device__ int get_nbatch_combine_device(int ncols) {
-#if __CUDA_ARCH__ == GGML_CUDA_CC_TURING
+        // Ada Lovelace optimization: enhanced batch processing
+#if __CUDA_ARCH__ >= GGML_CUDA_CC_ADA_LOVELACE
+        GGML_UNUSED(ncols);
+        return 96;
+#elif __CUDA_ARCH__ == GGML_CUDA_CC_TURING
         return ncols <= 16 ? 128 : 64;
 #else
         GGML_UNUSED(ncols);
-        return 128;
-#endif // __CUDA_ARCH__ == GGML_CUDA_CC_TURING
+        return 64;
+#endif
     }
 };
 
